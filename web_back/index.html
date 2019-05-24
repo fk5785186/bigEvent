@@ -62,7 +62,7 @@
     <!-- bootstrap -->
 
     <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+    <button type="button" class="btn btn-primary btn-lg getOut" data-toggle="modal" data-target="#myModal">
         Launch demo modal
     </button>
 
@@ -80,7 +80,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">点错了</button>
-                    <button type="button" class="btn btn-primary">去意已决</button>
+                    <button type="button" class="btn btn-primary decideGo">去意已决</button>
                 </div>
             </div>
         </div>
@@ -139,20 +139,22 @@
             }
         }
         $(function () {
-            $(".goOut").on("click", function () {
-                $(".btn-primary").click();
-                $(".btn-primary").on("click", function () {
-                    $.ajax({
-                        url: "https://autumnfish.cn/big/admin/logout",
-                        type: "post",
-                        success: function () {
-                            setTimeout(() => {
-                                window.location.href = "login.html";
-                            }, 500);
-                        }
-                    })
+            $(".goOut").click(function () {
+                $(".getOut").click();
+            })
+            $(".decideGo").click(function () {
+                $.ajax({
+                    url: "https://autumnfish.cn/big/admin/logout",
+                    type: "post",
+                    success: function () {
+                        setTimeout(() => {
+                            window.location.href =
+                                "login.html";
+                        }, 500);
+                    }
                 })
             })
+
         })
     </script>
 
