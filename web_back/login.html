@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="css/reset.css">
     <link rel="stylesheet" type="text/css" href="css/iconfont.css">
     <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" type="text/css" href="js/bootstrap/css/bootstrap.min.css">
 </head>
 
 <body>
@@ -29,8 +30,63 @@
             </form>
         </div>
 
-    </div> 
+        <!-- bootstrap -->
 
+
+    </div>
+
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm">Small
+        modal</button>
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content" style="height:100px;text-align:center;line-height: 100px;font-size: 20px;">
+                登录成功
+            </div>
+        </div>
+    </div>
+    <script src="js/jquery-1.12.4.min.js"></script>
+    <script src="js/bootstrap/js/bootstrap.min.js"></script>
+    <script>
+        $(function () {
+            $("form").on("click", function (e) {
+                e.preventDefault();
+            })
+            $(".input_sub").on("click", function () {
+                login();
+            })
+
+            function login() {
+                var userName = $(".input_txt").val().trim();
+                var password = $(".input_pass").val().trim();
+                if (userName.length == 0 || password.length == 0) {
+                    $(".btn-primary").click();
+                    $(".modal-content").text("用户名或密码错误");
+                    return
+                }
+                $.ajax({
+                    url: "https://autumnfish.cn/big/admin/login",
+                    type: "post",
+                    data: {
+                        user_name: userName,
+                        password: password,
+                    },
+                    success: function (backData) {
+                        if (backData.code == 200) {
+                            $(".btn-primary").click();
+                            $(".modal-content").text("登录成功");
+                            setTimeout(() => {
+                                window.location.href = "index.html";
+                            }, 1200);
+                        } else {
+                            $(".btn-primary").click();
+                            $(".modal-content").text("用户名或密码错误");
+                            return
+                        }
+                    }
+                })
+            }
+        })
+    </script>
 </body>
 
 </html>
