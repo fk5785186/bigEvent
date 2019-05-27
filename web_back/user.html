@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="css/iconfont.css">
     <link rel="stylesheet" href="css/main.css">
     <script src="js/jquery-1.12.4.min.js"></script>
-
+    <script src="js/bootstrap/js/bootstrap.min.js"></script>
 </head>
 
 <body>
@@ -24,38 +24,40 @@
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">用户名称：</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" id="inputEmail3" value="李思思">
+                        <input type="text" class="form-control username" id="inputEmail3" value="李思思" name="username">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">昵称：</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" id="inputEmail3" value="思思">
+                        <input type="text" class="form-control nickname" id="inputEmail3" value="思思" name="nickname">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">邮箱：</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" id="inputEmail3" value="lisisi@126.com">
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="inputPassword3" class="col-sm-2 control-label">用户图标：</label>
-                    <div class="col-sm-10">
-                        <img src="images/2.jpg" alt="" class="user_pic">
-                        <input type="file" id="exampleInputFile">
+                        <input type="text" class="form-control email" id="inputEmail3" value="lisisi@126.com"
+                            name="email">
                     </div>
                 </div>
 
                 <div class="form-group">
-                        <label for="inputEmail3" class="col-sm-2 control-label">密码：</label>
-                        <div class="col-sm-4">
-                            <input type="password" class="form-control" id="inputEmail3" value="12345678">
-                        </div>
+                    <label for="inputPassword3" class="col-sm-2 control-label">用户图标：</label>
+                    <div class="col-sm-10">
+                        <img src="images/2.jpg" alt="" class="user_pic usericon">
+                        <input type="file" id="exampleInputFile" name="user_pic">
                     </div>
-               
-    
+                </div>
+
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-2 control-label">密码：</label>
+                    <div class="col-sm-4">
+                        <input type="password" class="form-control password" id="inputEmail3" value="12345678"
+                            name="password">
+                    </div>
+                </div>
+
+
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
                         <button type="submit" class="btn btn-success">修改</button>
@@ -65,6 +67,70 @@
         </div>
     </div>
 
+
+    <!-- bootstarp模态框 -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm" style="display: none;"></button>
+
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content" style="height: 150px;text-align: center;line-height: 150px;font-size: 20px;">
+                恭喜您,修改成功!
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(function () {
+            $.ajax({
+                url: "https://autumnfish.cn/big/admin/userinfo_get",
+                type: "get",
+                success: function (backData) {
+                    // console.log(backData);
+                    // email: "lisisi@126.com"
+                    // nickname: "甜甜"
+                    // password: "12345678"
+                    // user_pic: "https://autumnfish.cn/big/static/66d538bbc31229e13c596818ed998ef7"
+                    // username: "甜甜"
+                    $(".username").val(backData.data.username);
+                    $(".nickname").val(backData.data.nickname);
+                    $(".email").val(backData.data.email);
+                    $(".usericon").attr("src", backData.data.user_pic);
+                    $(".password").val(backData.data.password);
+                }
+            })
+            $("#exampleInputFile").on("change", function (e) {
+                var url = URL.createObjectURL(this.files[0]);
+                $(".usericon").attr("src", url);
+            })
+            $(".btn-success").on("click", function (e) {
+                //     var username = $(".username").val();
+                //     var nickname = $(".nickname").val();
+                //     var email = $(".email").val();
+                //     var usericon = $("#exampleInputFile").URL.createObjectURL(this, files[0]);
+                //     var password = $(".password").val();
+                e.preventDefault();
+                var formdata = new FormData($(".article_form")[0]);
+                $.ajax({
+                    url: "https://autumnfish.cn/big/admin/userinfo_edit",
+                    type: "post",
+                    data: formdata,
+                    processData: false,
+                    contentType: false,
+                    success: function (backData) {
+                        console.log(backData);
+                        if (backData.code == 200) {
+                            $(".modal").modal();
+                            setTimeout(function () {
+                                window.location.reload();
+                            }, 2000)
+                        }
+                    }
+
+
+                })
+            })
+        })
+    </script>
 </body>
 
 </html>
